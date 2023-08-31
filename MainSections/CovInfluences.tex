@@ -1,0 +1,393 @@
+In this section we consider the formulations of covariant influences by Scandolo, Gour, and Sanders in \cite{ScandGourSanders}, and carefully go through the proofs of the major results with added comments.
+
+
+\subsection{Definitions}
+
+We begin by defining the key concepts which appear in the paper. In particular, we first consider the terminology of dynamical systems.
+
+\begin{defn}[label=defn:dynSyst]
+    A \textbf{dynamical system} is a pair $(S,\{\phi_t\})$ consisting of a set $S$ of elements, or states, and a family of functions $\{\phi_t\}$, indexed by either $\N, \Z$, or $\R$. If the index monoid is $\N$ or $\Z$ the system is said to be \textbf{discrete}, while the index monoid $\R$ constitutes a continuous system. The family is required to satisfy the following: 
+    \begin{enumerate}
+        \item $\phi_0 = \mathbbm{1}_S$ is the identity on $S$
+        \item $\phi_{t+s} = \phi_t\phi_s$, so $\phi_{(-)}$ constitutes a monoid homomorphism from $\N,\Z,$ or $\R$ to $\text{Set}(S,S)$. 
+    \end{enumerate}
+\end{defn}
+
+Note that this definition in particular implies $\phi_t\phi_s = \phi_s\phi_t$, due to the commutativity of addition. Moving forward we consider discrete dynamical systems, with index monoid $\N$ (where we take the convention $0 \in \N$). Hence, unless specified otherwise a ``dynamical system" will always refer to a ``discrete dynamical system." In this context the dynamics are ``generated" by a single map $\phi$, so a dynamical system may be considered to be a pair $(S,\phi)$, where in the above notation $\phi := \phi_1$, and $\phi^0 = \mathbbm{1}_S$. Then a dynamical system may be interpreted as a functor $$\Phi:\text{Mon}(\N)\rightarrow \text{Set}$$
+where $\text{Mon}(\N)$ is the one-object category with arrows corresponding to objects in $\N$ and composition given by addition. 
+
+
+A map of two dynamical systems $(S,\{\phi_t\})$ and $(S',\{\phi_t'\})$, or in the terminology of the paper, a \textbf{covariant influence}, is a set function $f:S\rightarrow S'$ such that 
+%%
+\begin{equation}\label{eq:covariance}
+    f\circ \phi_t = \phi_t'\circ f
+\end{equation}
+%%
+In other words, the category with objects dynamical systems and maps covariant influences, which we denote by $\text{DynCo}$ is isomorphic to the functor category $[\text{Mon}(\N),\text{Set}]$.
+
+
+Given a dynamical system $(S,\phi)$, a \textbf{cycle} is a set of states $\{s_i:i \in C\}$, for $C = \Z/\ell\Z$ a finite cyclic group, for some $\ell \in \N$, such that $\phi(s_i) = s_{i+1}$. The integer $\ell$ is called the \textbf{period} or \textbf{length} of the cycle.
+
+
+\begin{defn}[label=defn:attractor]
+    Let $(S,\{\phi_t\})$ be a general dynamical system with topology $\tau$ (if not specified otherwise, the discrete topology). An \textbf{attractor} is a subset of states $A \subseteq S$ such that \begin{enumerate}
+        \item $\phi_t(A) \subseteq A$ for all $t$.
+        \item There exists a neighborhood $B(A)$ of $A$, called the basin of attraction for $A$, consisting of all $b \in S$ such that for any neighborhood $N$ of $A$, there exists $T$ such that for $t > T$, $\phi_t(b) \in N$.
+        \item $A$ is minimal with respect to properties 1. and 2.
+    \end{enumerate}
+\end{defn}
+
+In our context $\tau$ is the discrete topology, so the basin of attraction is simply the collection of points which are eventually in $A$. The attractors also have a simple description in our case. Before giving it we prove an intermediate result on cycles.
+
+\begin{lem}[label=lem:cycles]
+    A subset $A$ of a dynamical system $(S,\phi)$ is a cycle if and only if there exists $\ell \in \N$, minimal, such that for all $a \in A$ $\phi^\ell(a) = a$, and for any $a,a' \in A$ there exists $0 \leq k < \ell$ such that $\phi^k(a) = a'$.
+\end{lem}
+\begin{proof}
+    The necessity follows by definition of a finite cyclic group and our characterization of a cycle above. To show sufficiency suppose $A$ is such a subset. Let $\psi = \phi\vert_A:A\rightarrow A$. Then $\psi^{\ell} = \mathbbm{1}_A$, so $\psi$ is a bijection. 
+    
+    We show $\ell = |A|$ and the $k$ in the lemma is unique. Towards a contradiction suppose we have $a \in A$ and $0 \leq k < k' < \ell$ such that $\phi^k(a) = \phi^{k'}(a)$. Then $\phi^{k'-k}(a) = a$ as $\phi$ is invertible. Then for any $a' \in A$, there exists $0 \leq d < \ell$ such that $\phi^d(a) = a'$, so that $$\phi^{k'-k}(a') = \phi^{k'-k+d}(a) = \phi^d(\phi^{k'-k}(a)) = \phi^d(a) = a'$$
+    contradicting the minimality of $\ell$ as $k' - k < \ell$. Thus the $k$ in the lemma is unique, so as $\{a,\phi(a),...,\phi^{\ell-1}(a)\} = A$ for any fixed $a \in A$, and each of the terms is distinct, $|A| = \ell$.
+
+    Fix $a \in A$. Then the map $k\mapsto \phi^k(a)$ is well-defined, bijective, and satisfies $\phi(\phi^k(a)) = \phi^{k+1}(a)$ for all $k \in \Z/\ell\Z$. This completes the proof.
+\end{proof}
+
+
+\begin{thm}[label=thm:attractorCycle]
+    Let $(S,\phi)$ be a finite dynamical system. Then a subset $A \subseteq S$ is an attractor if and only if $A$ is a cycle.
+\end{thm}
+\begin{proof}[Proof]
+    [$\impliedby$] First let $A \subseteq S$ be a cycle. Then $\phi(A) \subseteq A$, in fact we have equality as $A$ is a cycle. The neighborhood of $A$ exists trivially as we are considering the discrete topology. Finally, if $B \subseteq A$ is closed under $\phi$ it must equal $A$ as $\phi$ acts transitively on $A$. This shows $A$ is an attractor
+
+    [$\implies$] Now, suppose $A \subseteq S$ is an attractor. Since $S$, and hence $A$ as well, is finite, for each $a \in A$ there exists $k,\ell \in \N$ such that $0 < \ell$ but $\phi^k(a) = \phi^{k+\ell}(a)$. As $A$ is finite we may choose $\ell$ minimal with respect to this property for all $a \in A$. Let $a \in A$ such that $\phi^\ell(a) = a$, which exists by construction of $\ell$. Let $B = \{a,\phi(a),...,\phi^{\ell-1}(a)\}$. Then $B$ is a subset of $A$ which is closed under $\phi$, and hence by minimality $A = B$. But by Lemma \ref{lem:cycles} $B$ is a cycle, completing the proof.
+\end{proof}
+
+Basins of attraction are disjoint in our case. Indeed, if $A,A'\subseteq S$ are two distinct attractors, in particular $A\cap A' = \emptyset$ due to minimality. Now, if $a \in B(A)\cap B(A')$, then $\phi^k(a) \in A$, $\phi^j(a) \in A'$ for $j,k > 0$ sufficiently large. Taking their maximum would imply $\phi^{\max\{k,j\}}(a) \in A\cap A'$, which is impossible.
+
+
+We now seek to introduce randomness into our dynamical systems.
+
+
+\begin{defn}[label=defn:randDynSyst]
+    A random dynamical system $(S,\{\phi_t\})$ consists of a $\sigma$-algebra $\Omega$ on $S$ with a probability measure $\mathbb{P}$ such that for each time $t$, $\phi_t$ is a measure-preserving measurable function.
+\end{defn}
+
+For our considerations we take the $\sigma$-algebra $\Omega$ to be the power set $\mathscr{P}(S)$. Since $S$ is finite we may fix an enumeration $s_1,...,s_M$ of the elements of $S$, $M := |S|$. We may consider probability measures $\mathbb{P}$ on $S$ as vectors $\mathbf{p} \in \R^M$, where $\pi_i\circ \mathbf{p} = \mathbb{P}(s_i)$. Let $\iota:S\rightarrow \R^M$ include the states in as the standard basis. We can then extend the dynamics $\phi$ on our system to a linear map $$\Phi:\R^M\rightarrow \R^M$$
+such that $\Phi(\iota(s_i)) = \iota(\phi(s_i))$.
+
+
+We also have a few other important properties of states in a dynamical system $(S,\phi)$ which relate to the attractors of the system. First, for a state $s \in S$, its \textbf{transient progeny} is the minimal $d \in \N$ such that $\phi^d(s)$ is in an attractor. As $S$ is finite such a $d$ always exists. On the other end of the spectrum, the \textbf{ancestry} of a state $s$ is the largest natural number $a(s) \in \N$ such that there exists $t \in S$ so that $\phi^{a(s)}(t) =s$. Note that $a(s)$ is finite if and only if $s$ is not in an attractor, and for states in an attractor $a(s) = \infty$ by convention. 
+
+
+\subsubsection{Random Boolean Networks}
+
+An interesting case of dynamical systems which is widely studied as a model for genetic regulation in cells is that of random boolean networks. These are networks whose vertices represent genes, and directed arrows represent the influence of genes on each others' expression. We can assign a boolean value to each vertex to indicate an expressed versus unexpressed gene, so that state of the graph is described by a boolean string $$g = g_0g_1\cdots g_{M-1} \in \{0,1\}^M$$
+A gene evolves based on a function $$f_i:\{0,1\}^{K_i}\rightarrow \{0,1\}$$
+where $K_i$ is the number of genes which influence $g_i$. We can describe the randomness encoded in the initial choice of expressed genes by a probability vector $\mathbf{p} \in \R^{2^M}$. 
+
+
+We can regard such networks as dynamical systems by defining a dynamics map $\phi:\{0,1\}^N\rightarrow \{0,1\}^N$ given in terms of the functions $f_i$, so that $(\{0,1\}^N,\phi)$ is a dynamical system. 
+
+
+Interpreting this model biologically we can consider attractors as cell types.
+
+
+\subsubsection{Resource Theories}
+
+In order to define the notion of a resource theory we first must consider process theories, which categorically are (strict) symmetric monoidal categories. We call the arrows in a process theory the processes. 
+
+\begin{defn}[label=defn:resourceTheory]
+    A \textbf{resource theory} is a (strict) symmetric monoidal category $\mathcal{T}$ (i.e. a process theory) together with a distinguished subcollection $\mathcal{F}_1\subseteq \mathcal{T}_1$ making $(\mathcal{T}_0,\mathcal{F}_1)$ into a symmetric monoidal subcategory of $(\mathcal{T}_0,\mathcal{T}_1)$. The arrows in $\mathcal{F}_1$ are called \textbf{free operations} of the resource theory.
+\end{defn}
+
+We may define a pre-order on the objects in a resource theory $(\mathcal{T},\mathcal{F}_1)$ by saying $t \precsim t'$ in $\mathcal{T}_1$ if and only if $\text{dom}\,t = \text{dom}\,t'$ and there exists $f:\text{codom}\, t \rightarrow \text{dom}\,t'$ in $\mathcal{F}_1$ such that $t' = f\circ t$.
+
+A map of resource theories is a functor $F:(\mathcal{T},\mathcal{F}_1)\rightarrow (\mathcal{T}',\mathcal{F}_1')$ such that $F(\mathcal{F}_1) \subseteq \mathcal{F}_1'$. We may regard partially ordered sets $(P,\leq)$ as resource theories, where the category $\mathcal{P}$ has as objects points in $P$ and a unique arrow between all objects, while the subcollection of free operations are those determined by the partial order $\leq$. A \textbf{monotone} for a resource theory is then a map of resource theories into the resource theory given by a partially ordered set.
+
+
+A resource theory also allows us to talk of \textbf{free states}, which are maps $f:I\rightarrow S \in \mathcal{F}_1$ out of the unit for the symmetric monoidal structure on $\mathcal{T}$. 
+
+
+\subsection{Evolutionarity and the Non-Random Case}
+
+In this subsection we consider the results pertaining to discrete dynamical systems in the absence of randomness. We may consider the category of discrete dynamical systems and set functions $\text{Dyn}$ as a process theory, with symmetric monoidal structure endowed by the cartesian structure on $\text{Set}$. The maps in this category, i.e. the set functions, are called \textbf{influences}. Paired with $\text{DynCo}$ defined previously we obtain a well-defined resource theory
+%%
+\begin{equation}
+    (\text{Dyn},\text{DynCo}_1)
+\end{equation}
+%%
+Influences are interpreted as being caused by the external environment, while covariant influences occur over long enough time periods to respect the evolution of the system under consideration. 
+
+
+In this context the free deterministic states of a system $(S,\phi)$ are covariant maps $f:I\rightarrow (S,\phi)$ out of the unit dynamical system $I =(\{\star\},\text{id}_{\star})$. These are in one-to-one correspondence with fixed points under the dynamics (i.e. $s \in S$ such that $\phi(s) = s$). 
+
+\subsubsection{Conversion Problem}
+
+We now aim to find necessary and sufficient conditions for the existence of a covariant influence $f:(S,\phi)\rightarrow (S',\phi')$ sending some fixed $s \in S$ to a fixed $s' \in S'$. First we just consider what is required for the existence of a covariant influence between dynamical systems.
+
+\begin{nthm}[label=thm:existCov]{\cite[Prop 13]{ScandGourSanders}}
+    For $(S,\phi)$ and $(S',\phi')$ dynamical systems, there exists a covariant map $f:(S,\phi)\rightarrow (S',\phi')$ if and only if for every attractor of $(S,\phi)$ of length $\ell$, there exists an attractor of $(S',\phi')$ of length $\ell'\vert \ell$.
+\end{nthm}
+\begin{proof}[Proof]
+    [Necessity] Suppose $f:(S,\phi)\rightarrow (S',\phi')$ is a covariant influence, and let $A$ be an attractor of length $\ell$ in $S'$. Then $\phi'(f(A)) = f(\phi(A)) = f(A)$ since $A$ is an attractor. Further, for all $a \in A$, ${\phi'}^\ell(f(a)) = f(\phi^\ell(a)) = f(a)$, and for any $a' \in A$, there exists $0 \leq k < \ell$ such that $a' = \phi^k(a)$, so $f(a') = f(\phi^k(a)) = {\phi'}^k(f(a))$. 
+    
+    By Lemma \ref{lem:cycles} $f(A)$ is a cycle, and hence an attractor by Theorem \ref{thm:attractorCycle}. In particular, $A$ and $f(A)$ are cyclic groups induced by the dynamics $\phi$ and $\phi'$, and as $f(\phi^{m+n}(a)) = {\phi'}^{m+n}(f(a))$, $f$ constitutes a group homomorphism. This implies that the cycle length $\ell'$ of $f(A)$ divides the cycle length $\ell$ of $A$.
+
+    \vspace{10pt}
+
+    [Sufficiency] We may define a covariant influence $f:(S,\phi)\rightarrow (S',\phi')$ by defining it on each basin of attraction. Hence, let $B(A) \subseteq S$ be a basin of attraction for an arbitrary attractor $A$ of length $\ell$. Then there exists an attractor $A' \subseteq S'$ of cycle length $\ell'\vert \ell$ by assumption. 
+    
+    Begin by fixing $a \in A$ and $a' \in A'$, and set $f(\phi^n(a)) = {\phi'}^n(a')$. As $\ell'\vert \ell$ this is a well-defined covariant influence $f\vert_A:A\rightarrow A'$. Now we extend $f$ to the basin of attraction on $A$. For any $s \in B(A)\backslash A$ there exists a minimal $\delta(s;a) \in \N$ such that $\phi^{\delta(s;a)}(s) = a$. We then define $f(s) = \phi'\vert_{A'}^{-\delta(s;a)}(a')$.
+    
+    To show this extension is still covariant let $s \in B(A)\backslash A$ and consider $\phi(s)$. If $\phi(s) \in A$, then $\phi(s) = \phi^k(a)$ for some $k$ minimal. Then $\delta(s;a) = \ell-k+1$. In this case $$f(\phi(s)) = f(\phi^k(a)) = {\phi'}^k(a') = {\phi'}^{k-\ell}(a') = \phi'({\phi'}^{-\delta(s;a)}(a')) = \phi'(f(s))$$
+
+    Finally, if $\phi(s) \notin A$, $\delta(\phi(s);a) = \delta(s;a)-1$, so $$f(\phi(s)) = \phi'\vert_{A'}^{-\delta(s;a)+1}(a') = \phi'(f(a'))$$
+
+    This defines $f$ on the basin $B(A)$, and as $A$ was a arbitrary attractor of $S$ it follows that $f$ is defined on all of $S$. Further, by our construction $f$ is a covariant influence, completing sufficiency.
+\end{proof}
+
+As an immediate consequence we always have covariant influences into dynamical systems with fixed points.
+
+Now that we have characterized the existence of general covariant influences between dynamical systems, we want to address the conversion problem. We first consider some necessary conditions, with the first following from the proof of Theorem \ref{thm:existCov}.
+
+\begin{lem}[label=lem:divide]
+    Let $f:(S,\phi)\rightarrow (S',\phi')$ be a covariant influence. Then the length of $f(s)$ divides the length of $s$ for all $s \in S$.
+\end{lem}
+
+We also have two other necessary conditions on the properties of the elements $s$ and $f(s)$.
+
+\begin{lem}[label=lem:progeny]
+    Let $f:(S,\phi)\rightarrow (S',\phi')$ be a covariant influence. Then for all $s \in S$ the progeny of $f(s)$ is at most the progeny of $s$.
+\end{lem}
+\begin{proof}
+    Let $d$ be the progeny of $s \in S$. Then $\phi^d(s) \in A$ is in an attractor $A$ of $S$. By the proof of Theorem \ref{thm:existCov} $f(A)$ is an attractor, so $\phi^d(f(s)) = f(\phi^d(s)) \in f(A)$ lands in an attractor by covariance. In other words, the progeny of $f(s)$ is at most $d$.
+\end{proof}
+
+\begin{lem}[label=lem:ancestor]
+    Let $f:(S,\phi)\rightarrow (S',\phi')$ be a covariant influence. Then for all $s \in S$ 
+    %%
+    \begin{equation}
+        a(\phi^n(s))\leq a({\phi'}^n(f(s)))
+    \end{equation}
+    %%
+    for every $n \in \N$.
+\end{lem}
+\begin{proof}
+    Let $s \in S$ and $n \in \N$. Let $A$ be the attractor for which $s\in B(A)$. Then by covariance and the proof Theorem \ref{thm:existCov} $f(B(A)) \subseteq B(f(A))$. We split into cases:
+    %%
+    \begin{itemize}
+        \item Suppose $\phi^n(s) \in A$. Then $a(\phi^n(s)) = \infty$, while $f(\phi^n(s)) = {\phi'}^n(f(s)) \in f(A)$ so $a({\phi'}^n(f(s)) = \infty$.
+        \item Suppose $\phi^n(s) \notin A$ and $f(\phi^n(s)) \in f(A)$. Then $a(\phi^n(s)) < \infty$, while $a({\phi'}^n(f(s))) = \infty$, satisfying the inequality.
+        \item Finally, suppose $\phi^n(s) \notin A$ and $f(\phi^n(s)) \notin f(A)$, so both have finite ancestry. Let $t \in B(A)$ such that $\phi^{a(\phi^n(s))}(t) = \phi^n(s)$. Then by covariance $${\phi'}^{a(\phi^n(s))}(f(t)) = f(\phi^n(s)) = {\phi'}^n(f(s))$$
+        which implies $a({\phi'}^n(f(s))) \geq a(\phi^n(s))$.
+    \end{itemize}
+    %%
+    This completes the proof.
+\end{proof}
+
+The main result which remains is that together these conditions are in fact sufficient, and hence fully characterize the conversion problem for non-random discrete dynamical systems.
+
+
+\begin{nthm}[label=thm:convProb]{\cite[Thm 14]{ScandGourSanders}}
+    Let $(S,\phi)$ and $(S',\phi')$ be discrete dynamical systems. Let $s \in S$ and $s' \in S$ with progenies $d,d'$ and lengths $\ell,\ell'$, respectively. Then $s$ and $s'$ are connected by a covariant influence if and only if 
+    %%
+    \begin{enumerate}
+        \item $\text{DynCo}((S,\phi),(S',\phi')) \neq \emptyset$
+        \item $\ell'\vert \ell$
+        \item $d' \leq d$
+        \item $a({\phi'}^n(s')) \geq a(\phi^n(s))$ for $n = 0,...,d'-1$.
+    \end{enumerate}
+    %%
+\end{nthm}
+\begin{proof}
+    Necessity was proven in Lemmas \ref{lem:divide}, \ref{lem:progeny}, \ref{lem:ancestor}, and Theorem \ref{thm:existCov}. 
+
+    
+    Let $A$ be the attractor such that $s \in B(A)$. Then for any other attractor $A'$ in $S$ we choose an attractor $A''$ of $S'$ of length dividing the length of $A'$, which exists by Theorem \ref{thm:existCov} and the fact $\text{DynCo}((S,\phi),(S',\phi')) \neq \emptyset$. Then as in the proof of Theorem \ref{thm:existCov} we may define a covariant influence $f:(S\backslash B(A),\phi)\rightarrow (S',\phi')$.
+
+
+    It remains define $f$ on $B(A)$. We proceed in cases. If $d = 0$, $d' = 0$ as well so $s$ and $s'$ are in the attractors. Then we can define $f$ on $B(A)$ as in Theorem \ref{thm:existCov}.
+
+    Now, suppose $d > 0$. Then $s$ has $d+\ell$ successors, including itself, and for covariance we must define $f(\phi^k(s)) = {\phi'}^k(s')$ for each $0 \leq k \leq d+\ell-1$. We need only check covariance at $k = d+\ell-1$. But, $$f(\phi^{d+\ell}(s)) = f(\phi^d(s)) = {\phi'}^d(s') = {\phi'}^{d+\ell}(s')$$
+    since $d' \leq d$ and $\ell' \vert \ell$.
+
+
+    Let $\mathcal{P}_0 = \{t \in S:\exists k > 0, \phi^k(t) = s\}$ be the set of predecessors of $s$ distinct from $s$. As $a(s) \leq a(s')$, there exists ${s'}^* \in S'$ such that ${\phi'}^{a(s)}({s'}^*) = s'$. Then we define for $t \in \mathcal{P}_0$, $$f(t) := {\phi'}^{a(s)-\delta(t;s)}({s'}^*)$$
+    For $t \in \mathcal{P}_0$, 
+    $$f(\phi(t)) = {\phi'}^{a(s)-\delta(t;s)+1}({s'}^*) = \phi'(f(t))$$
+    if $\phi(t) \in \mathcal{P}_0$, since $\delta(\phi(t);s) = \delta(t;s)-1$, and otherwise if $\phi(t) = s$, $$f(\phi(t)) = s' = {\phi'}^{a(s)-\delta(t;s)+1}({s'}^*) = \phi'(f(t))$$
+    as $\delta(t;s) = 1$.
+
+
+    Let $\mathcal{S}$ denote the set of successors of $s$. Let $\mathcal{P}_1 = \{t \in S:\exists k > 0, \phi^k(t) = \phi(s)\}\backslash (\mathcal{P}_0\cup \mathcal{S})$. Inductively, for $r < d$, set $\mathcal{P}_{r+1} = \{t \in S:\exists k > 0,\phi^k(t) = \phi^r(s)\}\backslash(\mathcal{P}_k\cup\mathcal{S})$. It remains to define $f$ on $\mathcal{P}_1,...,\mathcal{P}_d$, which we split into cases:
+    %%
+    \begin{itemize}
+        \item Let $1\leq n < d'$. By hypothesis $a({\phi'}^n(s')) \geq a(\phi^n(s))$, so there exists ${s'}_n^* \in S'$ such that ${\phi'}^{a(\phi^n(s))}({s'}_n^*) = {\phi'}^n(s')$. Then for $w \in \mathcal{P}_n$ we set 
+        %%
+        \begin{equation*}
+            f(w) :={\phi'}^{a(\phi^n(s))-\delta(w;\phi^n(s))}({s'}_n^*)
+        \end{equation*}
+        %%
+        which is well-defined since $\delta(w;\phi^n(s)) \leq a(\phi^n(s))$. 
+
+        To show covariance observe that if $\phi(w) \in \mathcal{P}_n$
+        %%
+        \begin{equation*}
+            f(\phi(w)) = {\phi'}^{a(\phi^n(s))-\delta(\phi(w);\phi^n(s))}({s'}_n^*) = \phi'({\phi'}^{a(\phi^n(s))-\delta(w;\phi^n(s))}({s'}_n^*)) = \phi'(f(w))
+        \end{equation*}
+        %%
+        while for $\phi(w) = \phi^n(s)$, 
+        %%
+        \begin{equation*}
+            f(\phi^n(s)) = {\phi'}^n(s') = \phi'({\phi'}^{a(\phi^n(s))-1}({s'}_n^*)) = \phi'(f(w))
+        \end{equation*}
+        %%
+        as $\delta(w;\phi^n(s)) = 1$.
+        %%
+        \item Now we consider $d' \leq n \leq d$. In this case ${\phi'}^n(s') \in f(A)$. We set for $w \in \mathcal{P}_n$, 
+        %%
+        \begin{equation*}
+            f(w) := \phi'\vert_{f(A)}^{-\delta(w;\phi^n(s))}(\phi^n(s'))
+        \end{equation*}
+        %%
+        where $\phi'\vert_{f(A)}$ is a bijection so negative powers are reasonable.
+
+        To show covariance first suppose $\phi(w) \in \mathcal{P}_n$, so 
+        %%
+        \begin{equation*}
+            f(\phi(w)) = \phi'\vert_{f(A)}^{-\delta(\phi(w);\phi^n(s))}(\phi^n(s')) =\phi'\vert_{f(A)}^{-\delta(w;\phi^n(s))+1}(\phi^n(s')) = \phi'(f(w))
+        \end{equation*}
+        %%
+        Otherwise, if $\phi(w) \notin \mathcal{P}_n$ then $\phi(w) = \phi\vert_{A}^{\ell-\delta(w;\phi^n(s))+1}(\phi^n(s))$. Then 
+        %%
+        \begin{equation*}
+            f(\phi(w)) = \phi'\vert_{f(A)}^{\ell-\delta(w;\phi^n(s))+1}({\phi'}^n(s')) = \phi'(\phi'\vert_{f(A)}^{-\delta(w;\phi^n(s))}({\phi'}^n(s'))) = \phi'(f(w))
+        \end{equation*}
+        %%
+        since $\ell'\vert \ell$.
+    \end{itemize}
+    %%
+    This completes the proof and the deterministic conversion problem.
+\end{proof}
+
+This provides us with a full characterization of the conversion problem for the deterministic case. In the language of resource theory this result implies the resource for this theory is ``evolutionarity," that is the capacity to evolve, since states are always sent under covariant transformations to states which have no more successors.
+
+
+\subsection{Non-Attractorness and the Random Case}
+
+As in the deterministic case we can obtain a resource theory from studying discrete dynamical systems, now with randomness (i.e. a choice of probability distribution on the states). But, we must first make a slight adjustment to our state space.
+
+For a dynamical system $(S,\phi)$, let $\mathfrak{S}$ be the simplex of probability vectors in $\R^{|S|}$ (i.e. probability distributions over $S$). Then an element of our process theory is a pair $(\mathfrak{S},\Phi)$ obtained from a dynamical system $(S,\phi)$. The influences, or processes, in the process theory are stochastic maps $f:\mathfrak{S}_1\rightarrow \mathfrak{S}_2$, which can be represented by column-stochastic matrices (i.e. matrices where the column entries add to one). The symmetric monoidal structure is induced by the tensor $\otimes$ on the category of real vectors spaces. 
+
+The free operations which make this process theory into a resource theory are the covariant stochastic maps. Further, the free stochastic states are determined by covariant influences $f:(\mathfrak{S}_0,\text{id})\rightarrow (\mathfrak{S},\Phi)$, where $\mathfrak{S}_0$ is the $1$-simplex (i.e. the line). These are in one-to-one correspondence with probability distributions $\mathbf{p} \in \mathfrak{S}$ fixed by $\Phi$, $\Phi(\mathbf{p}) = \mathbf{p}$. These distributions can be further described after the following definition.
+
+
+\begin{defn}[label=defn:uniform]
+    A stochastic state $\mathbf{p} \in \mathfrak{S}$ is called \textbf{uniform} if two conditions hold:
+    %%
+    \begin{enumerate}
+        \item all probabilities associated with transient states are $0$;
+        \item deterministic states in the same attractor have the same probability.
+    \end{enumerate}
+\end{defn}
+
+
+\begin{thm}[label=thm:freeStoch]
+    The set of fixed probability distributions is equal to the set of uniform stochastic states.
+\end{thm}
+\begin{proof}
+    First let $\mathbf{p} = \mathbf{b}_1\oplus\cdots\oplus\mathbf{b}_k$ throughout denote a probability distributions split into basins of attraction. To prove the first inclusion let $\mathbf{p}$ be a uniform stochastic state. Then $\Phi(\mathbf{p})$ cycles the attractor probabilities in each basin since all of the transient probabilities are zero. But the attractor probabilities are uniform for a given basis, so $\Phi(\mathbf{p}) = \mathbf{p}$.
+
+
+    On the other hand, suppose $\mathbf{p}$ is a fixed probability distribution, so $\Phi(\mathbf{p}) = \mathbf{p}$. Then there exists an integer $m$ such that $\phi^m(s)$ is in an attractor for all states $s$ in the underlying dynamical system. Then $\Phi^m(\mathbf{p})$ has zeros in all of the transient basis vectors. Thus $\mathbf{p}$ has zeros in all transient states. This implies $\Phi(\mathbf{p})$ cycles the attractor probabilities in each basin, but as $\mathbf{p}$ is fixed we must have that the probabilities in the same attractor are equal.
+\end{proof}
+
+Theorem \ref{thm:freeStoch} implies that free stochastic states always exist, unlike their counterpart the free deterministic states.
+
+
+\subsubsection{Conversion Problem}
+
+
+We will see that some of the necessary conditions from the deterministic scenario still hold in the stochastic case, while others fail. Note that the conversion problem for stochastic states is the question of when a stochastic map $M:(\mathfrak{S},\Phi)\rightarrow (\mathfrak{S}',\Phi')$ exists which sends a specific $\mathbf{p} \in \mathfrak{S}$ to a specified $\mathbf{p}' \in \mathfrak{S}'$.
+
+
+Note for this case $\Phi$ and $M$ are matrices, so the covariance condition becomes the commutator equality $[\Phi,M] = 0$. In this context we say that an underlying deterministic state $s$ has a transition to a deterministic state $s'$ if their is an $M$ such that the entry $p(s'|s) > 0$. 
+
+We first prove some necessary conditions for transitions of deterministic states which are preserved.
+
+
+\begin{lem}[label=lem:stochProgeny]
+    Let $s \in (S,\phi)$ and $s' \in (S',\phi')$ be deterministic states. Suppose there exists a stochastic covariant influence $F:(\mathfrak{S},\Phi)\rightarrow (\mathfrak{S}',\Phi')$ such that $p(s'|s) > 0$. Then the transient progeny of $s'$ is at most the transient progeny of $s$.
+\end{lem}
+\begin{proof}
+    We proceed by contradiction, so suppose $d' > d$. Through the natural inclusion $F\iota(s) = \mathbf{q}+a\iota(s')$ is the $s$ column of $F$ whose entries are probabilities $p(t|s)$ where $t$ is a deterministic state in $S'$. Here $a \geq 0$ and $\mathbf{q}$ is a vector with non-negative entries. 
+    
+    
+    Let $\ell$ be the length of $s$, so $\Phi^{\ell+d}\iota(s) = \Phi^d\iota(s)$. By covariance we obtain 
+    %%
+    \begin{equation*}           
+        {\Phi'}^dF\iota(s) = F\Phi^d\iota(s) = F\Phi^{\ell+d}\iota(s) = {\Phi'}^{\ell+d}F\iota(s)
+    \end{equation*}
+    %%
+    In particular, for all $m \in \N$, ${\Phi'}^{m\ell}{\Phi'}^dF\iota(s) = {\Phi'}^dF\iota(s)$, so as we can choose $m$ large enough that the transient part on the left-hand side vanishes, ${\Phi'}^dF\iota(s)$ must only consist of probabilities in the attractor state positions.
+
+
+    However, 
+    %%
+    \begin{equation*}
+        {\Phi'}^dF\iota(s) = {\Phi'}^d\mathbf{q}+a{\Phi'}^d\iota(s')
+    \end{equation*}
+    %%
+    so if $a > 0$ and $d' > d$, ${\Phi'}^d\iota(s') = \iota(t)$ for some deterministic state $t \in S'$ which is not in an attractor. Hence, we obtain a contradiction. 
+\end{proof}
+
+
+\begin{lem}[label=lem:stochAncestry]
+    Let $s \in (S,\phi)$ and $s' \in (S',\phi')$ be deterministic states. Suppose there exists a stochastic covariant influence $F:(\mathfrak{S},\Phi)\rightarrow (\mathfrak{S}',\Phi')$ such that $p(s'|s) > 0$. Then 
+    %%
+    \begin{equation*}
+        a({\phi'}^n(s')) \geq a(\phi^n(s))
+    \end{equation*}
+    %%
+    for all $n \in \N$.
+\end{lem}
+\begin{proof}
+    Again we proceed by contradiction, so suppose $F$ is such a stochastic covariant influence, and suppose $a({\phi'}^n(s')) < a(\phi^n(s))$ for some $n \in \N$. After possibly rechoosing $s$ and $s'$, we may suppose without loss of generality that $n = 0$, so $a(s') < a(s)$. 
+
+
+    This inequality implies $s'$ is a transient state, and by Lemma \ref{lem:stochProgeny}, $s$ must also be transient. Recall $F\iota(s)$ is a column of probabilities in $F$ containing the probability $p(s'|s)$, which we aim to show is $0$. 
+
+    Let $t \in S$ be a deterministic state such that $\phi^{a(s)}(t) = s$. In particular, $\Phi^{a(s)}\iota(t) = \iota(s)$, so by covariance
+    %%
+    \begin{equation*}
+        F\iota(s) = {\Phi'}^{a(s)}F\iota(t)
+    \end{equation*}
+    %%
+    Let $t' \in S'$ be a deterministic state such that ${\phi'}^{a(s')}(t') = s'$, which exists by definition of the ancestry, and the fact that it is finite. Observe that $a(t') = 0$ and $a(\phi^k(t')) = k$ for each $0 \leq k \leq a(s')$. 
+
+
+    Now, ${\Phi'}F\iota(t)$ has $p(r|t) = 0$ for all ancestors of $\phi(t')$, since they have no ancestors, and so $\iota(r) \neq {\Phi'}\iota(r')$ for any $r' \in S'$. Inductively, suppose that $p(r|t) = 0$ in ${\Phi'}^kF\iota(t)$ for all ancestors of $s'$ at least $a(s')-k$ steps from $s'$, $0 \leq k < a(s')$. Then $p(r|t) = 0$ for all ancestors of $s'$ at at least $a(s')-(k+1)$ steps from $s'$ in ${\Phi'}^{k+1}F\iota(t)$ since for all such $r$, if $r'$ is a deterministic state for which $\phi'(r') = r$, and hence $\Phi'\iota(r') = \iota(r)$, $p(r'|t) = 0$ in ${\Phi'}^kF\iota(t)$ by the inductive hypothesis. It follows that $p(s'|s) = 0$ in ${\Phi'}^{a(s)}F\iota(t) = F\iota(s)$, contrary to hypothesis.
+\end{proof}
+
+
+
+
+
+\subsection{Discrete Logistic Map}
+
+
+A DLM represents the evolution of a certain population. Let $x$ be a variable representing a fraction of the population with respect to the saturation level, i.e. the maximum population for the system. The DLM equation is 
+%%
+\begin{equation}
+    x\leftarrow rx(1-x),\;r\in [0,4], x\in [0,1]
+\end{equation}
+%%
+which refers to a recursive replacement of $x$ with $rx(1-x)$. $r$ corresponds to some type of fertility rate in this scenario. 
+
+
+For $r > 1$ this DLM exhibits the phenomenon of period doubling until chaos is observed at $r_{ch} \approx 3.56995$. We may introduce an influence by modifying the recursion to a form
+%%
+\begin{equation}
+    x\leftarrow rx(1-x)+f(x)
+\end{equation}
+%%
+where $f$ is any real function of $x$. In the notation of our discrete dynamical systems $\phi(x) = rx(1-x)$. 

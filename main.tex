@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+
+\input{packages}
+\input{TikzDiagrams}
+\usepackage{quiver}
+
+%%% Specific Macros %%%
+\newcommand\lcm{\text{lcm}}
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+
+%% Heading
+\pagestyle{fancy}
+\lhead{Phys 598}
+\rhead{Name: E/Ea}
+\chead{}
+%\lfoot{Author's Name}
+%\cfoot{}
+%\rfoot{Page \thepage}
+
+%%%%%% BEGIN %%%%%%%%%%
+
+
+\begin{document}
+
+%%%%%% TITLE PAGE %%%%%
+
+
+\title{Phys 598: Resource Theories for Random Discrete Dynamical Systems}
+\author{E/Ea}
+\date{\today}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+\tableofcontents
+
+% ------- Problem Solutions ------- %
+
+\section{Project Proposal}
+
+\input{Proposal}
+
+
+\section{Covariant Influences}
+
+\input{MainSections/CovInfluences}
+
+
+
+\section{Theory of Resources}
+
+\input{MainSections/ResourceTheories}
+
+
+
+
+\section{Resource Convertability}
+
+
+\input{MainSections/ResourceConvertability}
+
+
+
+\section{Quantale Modules}
+
+
+\input{MainSections/QuantaleModules}
+
+
+\section{Current Questions}
+
+\input{Questions}
+
+
+\section{To-do List}
+
+\input{ToDo}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% - Appendices
+% \begin{appendices}
+
+\bibliographystyle{amsalpha}
+\bibliography{Refs}
+\nocite{*}
+
+% \end{appendices}
+
+
+\end{document}
+
+
+%%%%%% END %%%%%%%%%%%%%
